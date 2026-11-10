@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Transport Booking System (Preview)</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--page:#e9ebef;--note:#5b5f66;--tabbg:#fff;--tabfg:#152f2d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#17171a;--note:#9a9aa0;--tabbg:#2a2a2d;--tabfg:#f2f2f4}}
+:root[data-theme="dark"]{--page:#17171a;--note:#9a9aa0;--tabbg:#2a2a2d;--tabfg:#f2f2f4}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);font-family:Inter,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;padding:12px;color:#152f2d}
+.tabs{display:flex;gap:8px;justify-content:center;margin-bottom:10px;flex-wrap:wrap}
+.tabs button{border:0;border-radius:20px;padding:8px 16px;font:600 13px inherit;background:var(--tabbg);color:var(--tabfg);cursor:pointer}
+.tabs button.on{background:#102b2c;color:#fff}
+.win{max-width:1180px;margin:0 auto;background:#f5f7f4;border-radius:10px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.25)}
+.nav{background:#fff;display:flex;align-items:center;gap:26px;padding:0 24px;height:64px;flex-wrap:wrap}
+.nav b{font-size:26px;color:#152f2d}.nav a{font-size:13px;font-weight:500;color:#6b7973;cursor:pointer;padding:24px 0}
+.nav a.act{font-weight:600;color:#152f2d;border-bottom:3px solid #152f2d}.nav .sp{flex:1}
+.nav .si{background:#102b2c;color:#fff;border-radius:22px;padding:10px 20px;font-size:13px;font-weight:600}
+.pg{padding:20px 24px 16px}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.hd small{color:#6b7973;font-size:12px}.hd h1{margin:6px 0 4px;font-size:28px}.hd p{margin:0;color:#6b7973;font-size:13px}
+.steps{display:flex;gap:22px;font-size:12px;font-weight:500;align-items:center}
+.steps i{display:inline-flex;width:26px;height:26px;border-radius:13px;background:#e4ebdd;align-items:center;justify-content:center;font-style:normal;font-weight:600;margin-right:6px}
+.steps .on i{background:#102b2c;color:#fff}.steps .on{font-weight:600}
+.cards{display:grid;grid-template-columns:1.15fr 1fr .72fr;gap:16px;margin-top:18px}
+@media(max-width:900px){.cards{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #e0e7df;border-radius:22px;padding:22px}
+.dark{background:#102b2c;color:#fff;border:0}
+.dark .badge{display:inline-block;background:#284443;color:#d8e6dd;font-size:10px;font-weight:600;border-radius:15px;padding:8px 12px}
+.dark h2{font-size:25px;margin:14px 0 4px}.dark p{margin:0;color:#bccdc5;font-size:12px}
+.bus{height:150px;position:relative;margin:10px 0}
+.bus .b{position:absolute;left:30px;right:30px;top:30px;height:78px;border-radius:26px;background:linear-gradient(#d9f0e3,#8cc7ae)}
+.bus .w{position:absolute;top:44px;height:26px;width:11%;background:#17383a;border-radius:6px}
+.bus .s{position:absolute;left:30px;right:30px;top:86px;height:6px;background:#c3f36b}
+.bus .t{position:absolute;top:96px;width:34px;height:34px;border-radius:50%;background:#0e2224;border:7px solid #0e2224;box-shadow:inset 0 0 0 5px #6b8f86}
+.rt{font-size:11px;color:#afc3ba}.od{display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:600;margin:4px 0}
+.od em{color:#c3f36b;font-style:normal;font-weight:400}.tm{display:flex;justify-content:space-between;font-size:13px;font-weight:600}.tm span{font-weight:400;font-size:11px;color:#b9cbc1}
+.dt{border-top:1px solid #38504a;margin-top:14px;padding-top:12px;display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:#d8e4dc}.dt a{color:#c3f36b}
+.am{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.am div{background:#24403d;border-radius:10px;padding:12px 8px;font-size:10px;color:#e3ede7}
+.card h3{margin:0;font-size:18px}.card .sub{font-size:11px;color:#6b7973;margin:4px 0 12px}
+.map{background:#f7f9f4;border:1px solid #e5ebe1;border-radius:36px;padding:14px 12px}
+.fr{display:flex;justify-content:space-between;font-size:9px;font-weight:600;color:#6b7973;margin:0 18px 8px}
+.dr{background:#e7ece3;border-radius:7px;padding:5px 9px;font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(2,38px) 18px repeat(3,38px);gap:7px;justify-content:center}
+.rl{font-size:9px;color:#929d8e;display:flex;align-items:center;justify-content:center}
+.seat{height:38px;border-radius:8px;border:1px solid #c9d5c4;background:#fff;font:600 11px inherit;color:#152f2d;box-shadow:0 3px 0 rgba(33,59,38,.12);cursor:pointer;line-height:1.05;padding:0;white-space:pre-line}
+.seat.S{background:#c3f36b;border-color:#a3cd53}.seat.H{background:#ffe0a0;border-color:#d8ad51}
+.seat.B{background:#dde2da;border-color:#d6dcd1;color:#8c978b;cursor:default;box-shadow:none}
+.key{display:flex;gap:12px;font-size:10px;color:#6b7973;margin-top:12px;flex-wrap:wrap}.key i{display:inline-block;width:12px;height:12px;border-radius:4px;border:1px solid #c4cfc0;vertical-align:-2px;margin-right:4px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;min-height:38px}.chips span{background:#eff7e0;border-radius:9px;padding:10px 14px;font-weight:600;font-size:13px}
+.lbl{font-size:9px;font-weight:600;color:#6b7973;margin:14px 0 6px}
+.note{background:#fff7e5;border-radius:12px;padding:10px 12px;margin-top:8px;font-size:11px;font-weight:600;color:#765523}.note small{display:block;font-weight:400;font-size:9px;color:#866b42;margin-top:3px}
+.inp{width:100%;border:1px solid #e0e7df;border-radius:9px;padding:12px;font:12px inherit;color:#152f2d;background:#fff}
+.hint{font-size:10px;color:#6b7973;margin-top:5px}.hint.e{color:#b3261e}
+.fare div{display:flex;justify-content:space-between;font-size:12px;color:#6b7973;margin:5px 0}.fare b{color:#152f2d;font-weight:500}
+.tot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e0e7df;margin-top:10px;padding-top:10px;font-size:12px;font-weight:500}.tot b{font-size:24px}
+.pay{width:100%;margin-top:12px;border:0;border-radius:13px;background:#c3f36b;padding:16px 18px;font:600 13px inherit;color:#152f2d;display:flex;justify-content:space-between;cursor:pointer}
+.pay:disabled{opacity:.5;cursor:default}
+.ft{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#6b7973;margin-top:16px;gap:10px;flex-wrap:wrap}.ft b{color:#152f2d;font-size:18px}.ft a{color:#152f2d;font-weight:600;cursor:pointer}
+/* Booking Desk */
+.mb{background:#102b2c;color:#fff;display:flex;gap:18px;padding:8px 16px;font-size:12px}.mb span{cursor:default}
+.tb{background:#fff;display:flex;gap:8px;padding:8px 12px;align-items:center;border-bottom:1px solid #e0e7df;flex-wrap:wrap}
+.tb button{border:0;background:#eff7e0;border-radius:9px;padding:7px 12px;font:600 12px inherit;color:#152f2d;cursor:pointer;transition:.15s}
+.tb button:hover{box-shadow:0 0 12px 3px rgba(195,243,107,.9);transform:scale(1.06)}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.live{margin-left:auto;background:#c3f36b;font-weight:700;font-size:11px;border-radius:10px;padding:2px 10px;transform:rotate(-8deg) scale(1.1)}
+.dk{display:grid;grid-template-columns:230px 1fr;gap:14px;padding:14px}
+@media(max-width:760px){.dk{grid-template-columns:1fr}}
+.dk .card{border-radius:16px;padding:14px}
+.tree{font-size:12px;line-height:1.7}.tree details{margin-left:10px}.tree summary{cursor:pointer;font-weight:500}.tree div{margin-left:26px;color:#6b7973;cursor:pointer}
+.ttl{font-size:21px;font-weight:600;-webkit-box-reflect:below -4px linear-gradient(transparent 60%,rgba(0,0,0,.18));text-shadow:0 3px 6px rgba(16,43,44,.25)}
+.fl{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0;font-size:12px}.fl .inp{flex:1;min-width:140px;padding:8px 10px}
+.fl label{display:inline-flex;gap:4px;align-items:center;cursor:pointer}.fl input[type=radio]{accent-color:#102b2c}
+.lst{border:1px solid #e0e7df;border-radius:12px;height:260px;overflow:auto;font:12px/1.9 Consolas,ui-monospace,monospace}
+.lst div{padding:0 12px;border-bottom:1px solid #f0f3ef;white-space:pre}.lst .RESERVED{color:#8a5a00}.lst .BOOKED{color:#1b7a3a}.lst .EXPIRED{color:#b3261e}.lst .RELEASED{color:#6b7973}.lst .em{color:#6b7973;padding:12px;white-space:normal}
+.sm{font-size:11px;color:#6b7973;margin-top:8px}
+.cap{font-size:11px;color:var(--note);text-align:center;margin:10px auto 0;max-width:900px}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:16px}
+#modal div{background:#fff;border-radius:10px;padding:0;max-width:320px;width:100%;overflow:hidden}#modal h4{margin:0;background:#102b2c;color:#fff;padding:10px 14px;font-size:13px}
+#modal p{margin:0;padding:14px;font-size:13px;white-space:pre-line}#modal button{margin:0 14px 12px;float:right;border:0;border-radius:10px;background:#c3f36b;padding:7px 18px;font-weight:600;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="tabs"><button class="on" id="t1">Main window (Waygo design)</button><button id="t2">Booking Desk window (syllabus controls)</button></div>
+
+<div class="win" id="main">
+  <div class="nav"><b>waygo</b><a class="act">Book a trip</a><a id="mb">My bookings</a><a>How it works</a><span class="sp"></span><span style="font-size:13px;font-weight:500">Help center</span><span class="si">Sign in &nbsp;↗</span></div>
+  <div class="pg">
+    <div class="hd"><div><small>←&nbsp; All departures</small><h1>A better seat. A better journey.</h1><p>Choose your seat and make the next move yours.</p></div>
+      <div class="steps"><span><i>✓</i>Trip</span><span class="on" id="st2"><i id="n2">2</i>Seats</span><span id="st3"><i id="n3">3</i>Payment</span></div></div>
+    <div class="cards">
+      <div class="card dark"><span class="badge">THE AIRPORT EXPRESS</span><h2>Your journey, upgraded.</h2><p>Less city rush. More window-seat moments.</p>
+        <div class="bus"><div class="b"></div><i class="w" style="left:14%"></i><i class="w" style="left:28%"></i><i class="w" style="left:42%"></i><i class="w" style="left:56%"></i><i class="w" style="left:72%;width:14%"></i><div class="s"></div><i class="t" style="left:22%"></i><i class="t" style="left:62%"></i></div>
+        <div class="rt">Route A</div><div class="od">Central Station <em>→</em> Airport</div><div class="tm">09:30 AM <span>45 min · Direct</span> 10:15 AM</div>
+        <div class="dt"><span id="dt"></span><a>Change trip &nbsp;↗</a></div>
+        <div class="am"><div>Air-conditioned</div><div>Free Wi-Fi</div><div>USB charging</div></div></div>
+      <div class="card"><h3>Pick your perfect seat</h3><div class="sub" id="avail"></div>
+        <div class="map"><div class="fr"><span>FRONT</span><span class="dr">Driver</span></div><div class="grid" id="grid"></div></div>
+        <div class="key"><span><i style="background:#fff"></i>Available</span><span><i style="background:#c3f36b"></i>Selected</span><span><i style="background:#ffe0a0"></i>Held</span><span><i style="background:#dde2da"></i>Booked</span></div></div>
+      <div class="card"><h3>Your booking</h3><div class="sub">A little closer to your next stop.</div>
+        <div class="lbl">SELECTED SEATS</div><div class="chips" id="chips"></div><div class="hint" id="pax"></div>
+        <div class="note" id="hold" style="display:none"><span id="ht"></span><small>Confirm before your hold expires.</small></div>
+        <div class="lbl">PASSENGER DETAILS</div><input class="inp" id="nm" placeholder="Enter full name"><div class="hint" id="hint">Lead passenger name</div>
+        <div class="fare"><div class="lbl" style="margin-top:14px;font-size:13px;color:#152f2d">Fare breakdown</div><div><span id="fs"></span><b id="fa"></b></div><div><span>Service fee</span><b id="fe"></b></div></div>
+        <div class="tot"><span>Total amount</span><b id="tt"></b></div>
+        <button class="pay" id="pay"><span>Confirm &amp; pay</span><span>→</span></button></div>
+    </div>
+    <div class="ft"><span><b>waygo</b> &nbsp; Good journeys start with a great seat. &nbsp;·&nbsp; offline demo · 15s hold</span><a id="stress">Run 10-user stress test</a><span>Cancellation policy &nbsp; <a>Need help? ↗</a></span></div>
+  </div>
+</div>
+
+<div class="win" id="desk" style="display:none;max-width:980px">
+  <div class="mb"><span>File</span><span>Booking</span><span>View</span><span>Help</span></div>
+  <div class="tb"><button id="bR"><i class="dot" style="background:#2e9e44"></i>Refresh</button><button id="bS"><i class="dot" style="background:#e0a100"></i>Stress test</button><button id="bC"><i class="dot" style="background:#8c978b"></i>Clear</button><span class="live">LIVE</span></div>
+  <div class="dk">
+    <div class="card"><b style="font-size:14px">Network</b><div class="tree">
+      <details open><summary>Waygo network</summary>
+        <details open><summary>Route A: Central Station → Airport</summary><div>Central Station</div><div>City Mall</div><div>Airport T1</div><div>Airport</div></details>
+        <details><summary>Route B: City Center → University</summary><div>City Center</div><div>Library Square</div><div>University</div></details>
+        <details><summary>Route C: Harbor → Business Park</summary><div>Harbor</div><div>Fish Market</div><div>Tech Park</div><div>Business Park</div></details></details></div></div>
+    <div class="card" style="box-shadow:0 6px 16px rgba(16,43,44,.12)"><div class="ttl">Booking Desk</div>
+      <div class="fl"><input class="inp" id="q" placeholder="Search seat or passenger… (Esc clears)">
+        <label><input type="radio" name="f" value="All" checked>All</label><label><input type="radio" name="f" value="Reserved">Reserved</label><label><input type="radio" name="f" value="Booked">Booked</label><label><input type="radio" name="f" value="Released">Released</label>
+        <select class="inp" id="so" style="flex:0 0 auto;min-width:0"><option>Newest first</option><option>Oldest first</option><option>Seat number</option></select></div>
+      <div class="lst" id="lst"></div><div class="sm" id="sm"></div></div>
+  </div>
+</div>
+<p class="cap" id="cap">Browser mock of the JavaFX app. Reserve seats in the main window, then open the Booking Desk (the real app opens it as a second window from “My bookings”): every seat change appears there live, like the BookingListener events do.</p>
+<div id="modal"><div><h4 id="mh"></h4><p id="mp"></p><button id="mo">OK</button></div></div>
+<script>
+var T=15000,PRICE=450,FEE=30,seats={},mine=[],ev=[],paid=false,$=function(i){return document.getElementById(i)};
+$("dt").textContent=new Date().toLocaleDateString("en-GB",{weekday:"short",day:"2-digit",month:"short",year:"numeric"}).replace(/,/g,",").toUpperCase();
+var grid=$("grid"),cells={},rows="ABCDEFGH";
+[2,5,6,10,17,22,23,35,40].forEach(function(n){});
+for(var r=0;r<8;r++){for(var c=0;c<5;c++){if(c===2){var l=document.createElement("div");l.className="rl";l.textContent=rows[r];grid.appendChild(l)}
+  var n=r*5+c+1,id="S"+n,b=document.createElement("button");b.className="seat";b.onclick=(function(i){return function(){click(i)}})(id);grid.appendChild(b);cells[id]=b;
+  seats[id]={s:[2,5,6,10,17,22,23,35,40].indexOf(n)>=0?"B":"A",by:null,ts:0}}}
+function log(t,seat,who){ev.push({t:Date.now(),seat:seat,who:who,st:t});}
+function left(s){return Math.max(0,Math.ceil((s.ts+T-Date.now())/1000))}
+function hint(m,e){var h=$("hint");h.textContent=m;h.className="hint"+(e?" e":"")}
+function modal(h,p){$("mh").textContent=h;$("mp").textContent=p;$("modal").style.display="flex"}$("mo").onclick=function(){$("modal").style.display="none"};
+function reserve(id,who){var s=seats[id];if(s.s!=="A")return false;s.s="R";s.by=who;s.ts=Date.now();log("RESERVED",id,who);return true}
+function click(id){var s=seats[id];
+  if(s.s==="A"){var n=$("nm").value.trim();if(!n){hint("Enter the passenger name first, then pick your seats.",1);$("nm").focus();return}
+    if(reserve(id,n)){mine.push(id);paid=false;hint("Lead passenger name")}else hint("Seat "+id+" was just taken by someone else.",1)}
+  else if(s.s==="R"&&mine.indexOf(id)>=0){s.s="A";s.by=null;mine.splice(mine.indexOf(id),1);log("RELEASED",id,$("nm").value.trim())}
+  else if(s.s==="R")hint("Seat "+id+" is on hold by another passenger. It frees up if they do not pay in time.",1);
+  else hint("Seat "+id+" is already booked.",1);render()}
+$("pay").onclick=function(){if(!mine.length)return;var ok=[],who=$("nm").value.trim();
+  mine.forEach(function(id){var s=seats[id];if(s.s==="R"&&Date.now()-s.ts<T){s.s="B";ok.push(id);log("BOOKED",id,who)}});
+  mine=[];if(ok.length){paid=true;$("nm").value="";hint("Booking confirmed. Have a great journey!");modal("Booking confirmed","Seats "+ok.join(", ")+" are booked for "+who+".\nTotal paid: ₹"+(ok.length*PRICE+FEE))}render()};
+setInterval(function(){var now=Date.now();for(var id in seats){var s=seats[id];if(s.s==="R"&&now-s.ts>=T){var w=s.by;s.s="A";s.by=null;log("EXPIRED",id,w);
+  var i=mine.indexOf(id);if(i>=0){mine.splice(i,1);hint("Your hold on "+id+" expired and the seat was released.",1)}}}},1000);
+function stress(){var id=Object.keys(seats).find(function(k){return seats[k].s==="A"});if(!id)return;var w=0;for(var i=1;i<=10;i++)if(reserve(id,"Racer-"+i))w++;
+  modal("Winners: "+w+" (expected exactly 1)","10 threads tried to reserve "+id+" at the same instant.\nThe other 9 were rejected by the seat lock.\nThe seat shows as Held and auto-releases in 15s.");render()}
+$("stress").onclick=stress;$("bS").onclick=stress;
+function render(){var av=0;for(var id in seats){var s=seats[id],b=cells[id],n=id.slice(1).padStart(2,"0");if(s.s==="A")av++;
+  var st=s.s==="A"?"":s.s==="B"?"B":mine.indexOf(id)>=0?"S":"H";b.className="seat "+st;b.textContent=n;
+  b.title=s.s==="A"?"Available":s.s==="B"?"Booked":(st==="S"?"Your seat - click to release":"Held by "+s.by+" - "+left(s)+"s left")}
+  $("avail").textContent=av+" available · 40 seats · 2 + 3 layout";var n=mine.length;
+  $("chips").innerHTML=mine.map(function(i){return"<span>"+i+"</span>"}).join("");$("pax").textContent=n?n+(n>1?" passengers":" passenger"):"No seats selected yet";
+  $("hold").style.display=n?"block":"none";if(n){var m=Math.min.apply(null,mine.map(function(i){return left(seats[i])}));$("ht").textContent="Seats held for "+String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")}
+  $("fs").textContent=n+(n===1?" seat":" seats")+" × ₹"+PRICE;$("fa").textContent="₹"+n*PRICE;$("fe").textContent="₹"+(n?FEE:0);$("tt").textContent="₹"+(n?n*PRICE+FEE:0);$("pay").disabled=!n;$("nm").readOnly=!!n;
+  $("n2").textContent=paid?"✓":"2";$("n3").textContent=paid?"✓":"3";$("st2").className=paid?"":"on";renderDesk()}
+function renderDesk(){if($("desk").style.display==="none")return;var f=document.querySelector("input[name=f]:checked").value,q=$("q").value.trim().toLowerCase(),so=$("so").value;
+  var rows=ev.filter(function(e){var ok=f==="All"||(f==="Reserved"&&e.st==="RESERVED")||(f==="Booked"&&e.st==="BOOKED")||(f==="Released"&&(e.st==="RELEASED"||e.st==="EXPIRED"));
+    return ok&&(!q||e.seat.toLowerCase().indexOf(q)>=0||(e.who||"").toLowerCase().indexOf(q)>=0)});
+  rows.sort(function(a,b){return so==="Oldest first"?a.t-b.t:so==="Seat number"?(+a.seat.slice(1))-(+b.seat.slice(1)):b.t-a.t});
+  $("lst").innerHTML=rows.length?rows.map(function(e){return"<div class='"+e.st+"'>"+new Date(e.t).toLocaleTimeString("en-GB")+"   "+e.seat.padEnd(4)+" "+(e.who||"-").padEnd(14)+" "+e.st+"</div>"}).join(""):"<div class='em'>No activity yet - reserve a seat in the main window.</div>";
+  var c=function(k){return ev.filter(function(e){return k.indexOf(e.st)>=0}).length};
+  $("sm").textContent=rows.length+" shown of "+ev.length+" events   |   reserved "+c(["RESERVED"])+"   booked "+c(["BOOKED"])+"   released/expired "+c(["RELEASED","EXPIRED"])}
+function tab(d){$("main").style.display=d?"none":"";$("desk").style.display=d?"":"none";$("t1").className=d?"":"on";$("t2").className=d?"on":"";render()}
+$("t1").onclick=function(){tab(0)};$("t2").onclick=function(){tab(1)};$("mb").onclick=function(){tab(1)};
+$("bR").onclick=$("bC").onclick=function(){if(this.id==="bC")ev.length=0;render()};
+$("q").onkeydown=function(e){if(e.key==="Escape"){this.value="";render()}};$("q").oninput=$("so").onchange=render;
+document.querySelectorAll("input[name=f]").forEach(function(r){r.onchange=render});
+setInterval(render,250);render();
+</script>
+</body>
+</html>
